@@ -29,6 +29,7 @@ class Enemy(pygame.sprite.Sprite):
 		newY = self.rect[1] + self.yVel
 		self.rect = (newX, newY, self.rect[2], self.rect[3])
 		self.xVel = self.yVel = 0
+		
 # Brick obstacle class
 class Brick(pygame.sprite.Sprite):
 	def __init__(self, imgPath, rect):
