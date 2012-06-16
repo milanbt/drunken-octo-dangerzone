@@ -1,7 +1,7 @@
-import os
 import pygame
 from pygame.locals import *
-import utils, gsprites
+import utils
+from gsprites import *
 
 # Initialize pygame and display module
 pygame.init()
@@ -13,12 +13,20 @@ dirtyRects = []
 # Create screen to draw on
 screen = pygame.display.set_mode((480,272))
 
-art = gsprites.Protagonist('articuno.gif', (0,0,32,32))
-brick1 = gsprites.Brick('brick.png', (32,0,32,32))
-brick2 = gsprites.Brick('brick.png', (32,32,32,32))
-brick3 = gsprites.Brick('brick.png', (0,32,32,32))
-
-bricks = pygame.sprite.Group(brick1, brick2, brick3)
+# Create map editor at some point
+earl = Protagonist((0,0,16,16))
+grassTiles = [\
+	GrassTile((0,0,16,16)),\
+	GrassTile((16,0,16,16)),\
+	GrassTile((32,0,16,16)),\
+	GrassTile((48,0,16,16)),\
+	GrassTile((0,16,16,16)),\
+	GrassTile((16,16,16,16)),\
+	GrassTile((32,16,16,16)),\
+	GrassTile((48,16,16,16))]
+roadTiles = [\
+	RoadTile((64,0,16,16)),\
+	RoadTile((64,16,16,16))]
 
 exit = False
 clock = pygame.time.Clock()
@@ -38,31 +46,40 @@ while(not exit):
 
 	# Key states for player movement
 	keyPressed = pygame.key.get_pressed()
-	if keyPressed[K_UP]: art.yVel -= 4
-	if keyPressed[K_DOWN]: art.yVel += 4
-	if keyPressed[K_RIGHT]: art.xVel += 4
-	if keyPressed[K_LEFT]: art.xVel -= 4
+	if keyPressed[K_UP]: 
+		earl.yVel -= 4
+		earl.xVel = 0
+	if keyPressed[K_DOWN]: 
+		earl.yVel += 4
+		earl.xVel = 0
+	if keyPressed[K_RIGHT]: 
+		earl.xVel += 4
+		earl.yVel = 0
+	if keyPressed[K_LEFT]: 
+		earl.xVel -= 4
+		earl.yVel = 0
 	
 	# Fills a black default background in places where things moved	
-	if art.dirty == 1:	
-		screen.fill((0, 0, 0), art.rect)
+	if earl.dirty == 1:	
+		screen.fill((0, 0, 0), earl.rect)
 	
 	# dirtyRects: collection of rects where screen has changed
-	dirtyRects.append(art.rect)
+	dirtyRects.append(earl.rect)
 	
 	# gsprites.Protagonist's update sets all it's velocities to 0 after 
 	# incrementing its position with them
-	art.update()
+	earl.update()
 	
-	dirtyRects.append(art.rect)
-	for b in bricks.sprites():
-		dirtyRects.append(b.rect)
+	dirtyRects.append(earl.rect)
+	
+	# dirtyRects still needs to account for tiles being walked on and such
 	
 	# All drawing here
-	art.draw(screen)
-	bricks.draw(screen)
+	drawTiles(grassTiles, screen)
+	drawTiles(roadTiles, screen)
+	earl.draw(screen)
 	
-	# Redraw dirty parts of screen
+	# Redraw dirty pearls of screen
 	pygame.display.update(dirtyRects)
 	
 	# Something said to do this; should work without it
