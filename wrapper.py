@@ -39,6 +39,9 @@ class Stage:
 			RoadTile((32,16,16,16), TILE_SHEET),\
 			GrassTile((48,16,16,16), TILE_SHEET),\
 			)
+		self.blockTiles = (\
+			BlockTile((32,16,16,16), TILE_SHEET),\
+			BlockTile((48,16,16,16), TILE_SHEET))
 	# Calls update on every sprite
 	def update(self):
 		oldRect = self.earl.rect
@@ -46,6 +49,13 @@ class Stage:
 		if self.earl.dirty == 1:
 			self.dirtyRects.append(self.earl.rect)
 			self.dirtyRects.append(oldRect)
+		for bt in self.blockTiles:
+			if pygame.Rect(self.earl.rect).colliderect(bt.rect):
+				self.dirtyRects.remove(self.earl.rect)
+				self.earl.rect = (\
+					self.earl.rect[0] - self.earl.oldXVel,\
+					self.earl.rect[1] - self.earl.oldYVel,\
+					self.earl.rect[2], self.earl.rect[3])
 		for ft in self.floorTiles:
 			if pygame.sprite.collide_rect(ft, self.earl) or\
 				pygame.Rect(oldRect).colliderect(ft.rect):
@@ -59,6 +69,8 @@ class Stage:
 			self.screen.fill((0,0,0), r)
 		for ft in self.floorTiles:
 			ft.draw(self.screen)
+		for bt in self.blockTiles:
+			bt.draw(self.screen)
 		self.earl.draw(self.screen)
 	def flip(self):
 		pygame.display.update(self.dirtyRects)

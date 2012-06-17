@@ -24,6 +24,7 @@ class Protagonist(IcySprite):
 	def __init__(self, rect, sheet, area = (0,0,16,16)):
 		IcySprite.__init__(self, rect, sheet, area)
 		self.xVel, self.yVel = 0, 0
+		self.oldXVel, self.oldYVel = 0, 0
 		self.health = 100
 		# | Fixes bug where character isn't drawn when game starts
 		# V until the user presses an arrow key
@@ -51,6 +52,9 @@ class Protagonist(IcySprite):
 		newX = self.rect[0] + self.xVel
 		newY = self.rect[1] + self.yVel
 		self.rect = (newX, newY, self.rect[2], self.rect[3])
+		# Update old (previous frame) velocities
+		self.oldXVel = self.xVel
+		self.oldYVel = self.yVel
 		self.xVel = self.yVel = 0
 	
 # Tile class: super class for objects sharing the simple_tileset.png file
