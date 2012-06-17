@@ -1,6 +1,6 @@
 import pygame
 from pygame.locals import *
-import utils, wrapper
+import wrapper
 from gsprites import *
 
 exit = False

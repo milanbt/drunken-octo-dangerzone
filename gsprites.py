@@ -1,4 +1,4 @@
-import pygame, utils
+import pygame
 from pygame.locals import *
 
 # Should look at pygame docs and examples of 
@@ -88,14 +88,18 @@ class Tile(IcySprite):
 	def update(self):
 		pass
 		
-class GrassTile(Tile):
+class GroundTile(Tile):
 	def __init__(self, rect, sheet, area = (0,0,16,16)):
-		Tile.__init__(self, rect, sheet, area)
-		
-class RoadTile(Tile):
-	def __init__(self, rect, sheet, area = (16,0,16,16)):
 		Tile.__init__(self, rect, sheet, area)
 	
 class BlockTile(Tile):
 	def __init__(self, rect, sheet, area = (48,0,16,16)):
 		Tile.__init__(self, rect, sheet, area)
+
+class KeyDoorTile(Tile):
+	def __init__(self, rect, sheet, area = (32,0,16,16)):
+		Tile.__init__(self, rect, sheet, area) 
+
+class SpecialTile(Tile):
+	def __init__(self, rect, sheet, area = (0,48,16,16)):
+		Tile.__init__(self, rect, sheet, area) 
