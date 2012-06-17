@@ -6,7 +6,7 @@ from gsprites import *
 exit = False
 clock = pygame.time.Clock()
 
-stage = wrapper.Stage()
+stage = wrapper.Stage((800,600))
 	
 ##################
 # MAIN GAME LOOP #

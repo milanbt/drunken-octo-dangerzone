@@ -5,11 +5,19 @@ from pygame.locals import *
 # sprite sheet use with built in sprite classes.
 # Current implementation could probably do without
 # inheriting from DirtySprite
+
+# Constant defining number of times to scale2x the game
+ZOOM_LVL = 2
+def rectZoom(rect):
+	for i in range(ZOOM_LVL):
+		rect = (rect[0]*2,rect[1]*2,rect[2]*2,rect[3]*2)
+	return rect
+		
 class IcySprite(pygame.sprite.DirtySprite):
 	def __init__(self, rect, sheet, area = (0,0,0,0)):
 		pygame.sprite.DirtySprite.__init__(self)
-		self.area = area
-		self.rect = pygame.Rect(rect)
+		self.area = pygame.Rect(rectZoom(area))
+		self.rect = pygame.Rect(rectZoom(rect))
 		self.dirty = 1
 		self.sheet = sheet
 	# Used by wrapper.Stage
@@ -55,8 +63,8 @@ class Protagonist(IcySprite):
 			return
 		self.needsInitialDraw = False
 		self.dirty = 1
-		newX = self.rect[0] + self.xVel
-		newY = self.rect[1] + self.yVel
+		newX = self.rect[0] + 2**ZOOM_LVL * self.xVel
+		newY = self.rect[1] + 2**ZOOM_LVL * self.yVel
 		self.rect = (newX, newY, self.rect[2], self.rect[3])
 		# Update old (previous frame) velocities
 		self.oldXVel = self.xVel
@@ -66,13 +74,13 @@ class Protagonist(IcySprite):
 		# Hard coded animation for player
 		# self.frame * 16 is probably unreadable and stupid
 		if self.dir == Protagonist.NORTH:
-			self.area = (16, self.frame * 16, 16, 16)
+			self.area = rectZoom((16, self.frame * 16, 16, 16))
 		elif self.dir == Protagonist.SOUTH:
-			self.area = (0, self.frame * 16, 16, 16)
+			self.area = rectZoom((0,self.frame * 16, 16, 16))
 		elif self.dir == Protagonist.EAST:
-			self.area = (32, self.frame * 16, 16, 16)
+			self.area = rectZoom((32,self.frame * 16, 16, 16))
 		elif self.dir == Protagonist.WEST:
-			self.area = (48, self.frame * 16, 16, 16)
+			self.area = rectZoom((48,self.frame * 16, 16, 16))
 		
 		# Update frame #
 		if self.frameChangeCount < Protagonist.FRAMES_PER_STILL:

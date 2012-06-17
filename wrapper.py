@@ -4,13 +4,16 @@ from gsprites import *
 
 # Helper function for image loading
 def loadImage(filePath):
-	return pygame.Surface.convert_alpha(pygame.image.load(filePath))
+	ret = pygame.Surface.convert_alpha(pygame.image.load(filePath))
+	for i in range(ZOOM_LVL):
+		ret = pygame.transform.scale2x(ret)
+	return ret
 
 # Stage class to hold, update, and draw sprites
 class Stage:
 	EARL_SHEET = None
 	TILE_SHEET = None
-	def __init__(self):
+	def __init__(self, screenSize):
 		# Initialize pygame and display module
 		pygame.init()
 		pygame.display.init()
@@ -20,7 +23,7 @@ class Stage:
 		self.dirtyRects = []
 		
 		# Create screen to draw on
-		self.screen = pygame.display.set_mode((480,272))
+		self.screen = pygame.display.set_mode(screenSize)
 		
 		# Class constants holding the sprite sheet surfaces
 		EARL_SHEET = loadImage('gfx/earl_of_ice.png')
@@ -63,8 +66,8 @@ class Stage:
 			if pygame.Rect(self.earl.rect).colliderect(bt.rect):
 				self.dirtyRects.remove(self.earl.rect)
 				self.earl.rect = (\
-					self.earl.rect[0] - self.earl.oldXVel,\
-					self.earl.rect[1] - self.earl.oldYVel,\
+					self.earl.rect[0] - 2**ZOOM_LVL * self.earl.oldXVel,\
+					self.earl.rect[1] - 2**ZOOM_LVL * self.earl.oldYVel,\
 					self.earl.rect[2], self.earl.rect[3])
 			bt.update()
 			if bt.dirty == 1:
@@ -73,8 +76,8 @@ class Stage:
 			if pygame.Rect(self.earl.rect).colliderect(st.rect):
 				self.dirtyRects.remove(self.earl.rect)
 				self.earl.rect = (\
-					self.earl.rect[0] - self.earl.oldXVel,\
-					self.earl.rect[1] - self.earl.oldYVel,\
+					self.earl.rect[0] - 2**ZOOM_LVL * self.earl.oldXVel,\
+					self.earl.rect[1] - 2**ZOOM_LVL * self.earl.oldYVel,\
 					self.earl.rect[2], self.earl.rect[3])
 			st.update()
 			if st.dirty == 1:
@@ -83,8 +86,8 @@ class Stage:
 			if pygame.Rect(self.earl.rect).colliderect(kdt.rect):
 				self.dirtyRects.remove(self.earl.rect)
 				self.earl.rect = (\
-					self.earl.rect[0] - self.earl.oldXVel,\
-					self.earl.rect[1] - self.earl.oldYVel,\
+					self.earl.rect[0] - 2**ZOOM_LVL * self.earl.oldXVel,\
+					self.earl.rect[1] - 2**ZOOM_LVL * self.earl.oldYVel,\
 					self.earl.rect[2], self.earl.rect[3])
 			kdt.update()
 			if kdt.dirty == 1:
