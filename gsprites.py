@@ -10,7 +10,7 @@ class IcySprite(pygame.sprite.DirtySprite):
 	def __init__(self, rect, sheet, area = (0,0,0,0)):
 		pygame.sprite.DirtySprite.__init__(self)
 		self.area = area
-		self.rect = rect
+		self.rect = pygame.Rect(rect)
 		self.dirty = 1
 		self.sheet = sheet
 	# Used by wrapper.Stage
@@ -25,6 +25,9 @@ class Protagonist(IcySprite):
 		IcySprite.__init__(self, rect, sheet, area)
 		self.xVel, self.yVel = 0, 0
 		self.health = 100
+		# | Fixes bug where character isn't drawn when game starts
+		# V until the user presses an arrow key
+		self.needsInitialDraw = True
 	def update(self):
 		# Key states for player movement
 		# Maybe use events, this isn't working perfectly
@@ -41,7 +44,7 @@ class Protagonist(IcySprite):
 		if keyPressed[K_LEFT]: 
 			self.xVel -= 4
 			self.yVel = 0
-		if self.xVel == 0 and self.yVel == 0:
+		if not self.needsInitialDraw and self.xVel == 0 and self.yVel == 0:
 			self.dirty = 0
 			return
 		self.dirty = 1

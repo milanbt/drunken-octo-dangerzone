@@ -1,10 +1,6 @@
 import pygame
 from pygame.locals import *
 import utils, wrapper
-from gsprites import *
-
-# Create empty dirtyRects list of rectangles for efficient drawing
-dirtyRects = []
 
 exit = False
 clock = pygame.time.Clock()
