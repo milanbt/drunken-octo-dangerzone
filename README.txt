@@ -1,5 +1,5 @@
 drunken-octo-dangerzone
 =======================
 
-Top down view RPG
+Uncertain of the games direction currently
 
