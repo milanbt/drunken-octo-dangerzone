@@ -7,7 +7,7 @@ from pygame.locals import *
 # inheriting from DirtySprite
 
 # Constant defining number of times to scale2x the game
-ZOOM_LVL = 2
+ZOOM_LVL = 1
 def rectZoom(rect):
 	for i in range(ZOOM_LVL):
 		rect = (rect[0]*2,rect[1]*2,rect[2]*2,rect[3]*2)

@@ -6,7 +6,8 @@ from gsprites import *
 def loadImage(filePath):
 	ret = pygame.Surface.convert_alpha(pygame.image.load(filePath))
 	for i in range(ZOOM_LVL):
-		ret = pygame.transform.scale2x(ret)
+		ret = pygame.transform.scale(ret, \
+			(ret.get_width()*2, ret.get_height()*2))
 	return ret
 
 # Stage class to hold, update, and draw sprites
