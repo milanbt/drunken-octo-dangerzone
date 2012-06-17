@@ -1,6 +1,7 @@
 import pygame
 from pygame.locals import *
 import utils, wrapper
+from gsprites import *
 
 exit = False
 clock = pygame.time.Clock()

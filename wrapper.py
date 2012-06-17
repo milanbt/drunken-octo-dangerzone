@@ -59,7 +59,8 @@ class Stage:
 		for ft in self.floorTiles:
 			if pygame.sprite.collide_rect(ft, self.earl) or\
 				pygame.Rect(oldRect).colliderect(ft.rect):
-				ft.dirty = 1
+				if self.earl.dirty == 1:
+					ft.dirty = 1
 			ft.update()
 			if ft.dirty == 1:
 				self.dirtyRects.append(ft.rect)
