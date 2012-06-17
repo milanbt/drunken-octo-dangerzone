@@ -104,6 +104,88 @@ class BlockTile(Tile):
 	def __init__(self, rect, sheet, area = (48,0,16,16)):
 		Tile.__init__(self, rect, sheet, area)
 
+TL_ = rectZoom((16,16,16,16))
+T_ = rectZoom((32,16,16,16))
+TR_ = rectZoom((48,16,16,16))
+R_ = rectZoom((48,32,16,16))
+BR_ = rectZoom((48,48,16,16))
+B_ = rectZoom((32,48,16,16))
+BL_ = rectZoom((16,48,16,16))
+L_ = rectZoom((16,32,16,16))
+M_ = rectZoom((32,32,16,16))
+class LakeSprite(Tile):
+	def __init__(self, rect, sheet, area = (0,0,0,0)):
+		Tile.__init__(self, rect, sheet, area)
+		self.rect = rect
+	def draw(self, surface):
+		if self.dirty == 1:
+			for i in range(self.rect[2]/16):
+				for j in range(self.rect[3]/16):
+					if i == 0 and j == 0:
+						surface.blit(self.sheet,\
+							((self.rect[0]+i*16) * 2**ZOOM_LVL,\
+								(self.rect[1]+j*16) * 2**ZOOM_LVL,
+								16 * 2**ZOOM_LVL,\
+								16 * 2**ZOOM_LVL),\
+							TL_)
+					elif i == 0 and j == self.rect[3]/16 - 1:
+						surface.blit(self.sheet,\
+							((self.rect[0]+i*16) * 2**ZOOM_LVL,\
+								(self.rect[1]+j*16) * 2**ZOOM_LVL,
+								16 * 2**ZOOM_LVL,\
+								16 * 2**ZOOM_LVL),\
+							BL_)
+					elif j == 0 and i == self.rect[2]/16 - 1:
+						surface.blit(self.sheet,\
+							((self.rect[0]+i*16) * 2**ZOOM_LVL,\
+								(self.rect[1]+j*16) * 2**ZOOM_LVL,
+								16 * 2**ZOOM_LVL,\
+								16 * 2**ZOOM_LVL),\
+							TR_)
+					elif i == self.rect[2]/16 - 1 and \
+						j == self.rect[3]/16 - 1:
+						surface.blit(self.sheet,\
+							((self.rect[0]+i*16) * 2**ZOOM_LVL,\
+								(self.rect[1]+j*16) * 2**ZOOM_LVL,
+								16 * 2**ZOOM_LVL,\
+								16 * 2**ZOOM_LVL),\
+							BR_)
+					elif i == 0:
+						surface.blit(self.sheet,\
+							((self.rect[0]+i*16) * 2**ZOOM_LVL,\
+								(self.rect[1]+j*16) * 2**ZOOM_LVL,
+								16 * 2**ZOOM_LVL,\
+								16 * 2**ZOOM_LVL),\
+							L_)
+					elif i == self.rect[2]/16 - 1:
+						surface.blit(self.sheet,\
+							((self.rect[0]+i*16) * 2**ZOOM_LVL,\
+								(self.rect[1]+j*16) * 2**ZOOM_LVL,
+								16 * 2**ZOOM_LVL,\
+								16 * 2**ZOOM_LVL),\
+							R_)
+					elif j == 0:
+						surface.blit(self.sheet,\
+							((self.rect[0]+i*16) * 2**ZOOM_LVL,\
+								(self.rect[1]+j*16) * 2**ZOOM_LVL,
+								16 * 2**ZOOM_LVL,\
+								16 * 2**ZOOM_LVL),\
+							T_)
+					elif j == self.rect[3]/16 - 1:
+						surface.blit(self.sheet,\
+							((self.rect[0]+i*16) * 2**ZOOM_LVL,\
+								(self.rect[1]+j*16) * 2**ZOOM_LVL,
+								16 * 2**ZOOM_LVL,\
+								16 * 2**ZOOM_LVL),\
+							B_)
+					else:
+						surface.blit(self.sheet,\
+							((self.rect[0]+i*16) * 2**ZOOM_LVL,\
+								(self.rect[1]+j*16) * 2**ZOOM_LVL,
+								16 * 2**ZOOM_LVL,\
+								16 * 2**ZOOM_LVL),\
+							M_)
+			self.dirty = 0
 class KeyDoorTile(Tile):
 	def __init__(self, rect, sheet, area = (32,0,16,16)):
 		Tile.__init__(self, rect, sheet, area) 

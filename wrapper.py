@@ -56,6 +56,10 @@ class Stage:
 			SpecialTile((0,16,16,16), TILE_SHEET),)
 		self.keyDoorTiles = (\
 			KeyDoorTile((16,16,16,16), TILE_SHEET),)
+		self.lakeSprites = (\
+			LakeSprite((0,64,48,48), TILE_SHEET),\
+			LakeSprite((128,64,32,64), TILE_SHEET),\
+			LakeSprite((0,256,80,32), TILE_SHEET))
 	# Calls update on every sprite
 	def update(self):
 		oldRect = self.earl.rect
@@ -93,6 +97,16 @@ class Stage:
 			kdt.update()
 			if kdt.dirty == 1:
 				self.dirtyRects.append(kdt.rect)
+		for st in self.lakeSprites:
+			if pygame.Rect(self.earl.rect).colliderect(rectZoom(st.rect)):
+				self.dirtyRects.remove(self.earl.rect)
+				self.earl.rect = (\
+					self.earl.rect[0] - 2**ZOOM_LVL * self.earl.oldXVel,\
+					self.earl.rect[1] - 2**ZOOM_LVL * self.earl.oldYVel,\
+					self.earl.rect[2], self.earl.rect[3])
+			st.update()
+			if st.dirty == 1:
+				self.dirtyRects.append(rectZoom(st.rect))
 		for ft in self.floorTiles:
 			if pygame.sprite.collide_rect(ft, self.earl) or\
 				pygame.Rect(oldRect).colliderect(ft.rect):
@@ -113,6 +127,8 @@ class Stage:
 			st.draw(self.screen)
 		for kdt in self.keyDoorTiles:
 			kdt.draw(self.screen)
+		for ls in self.lakeSprites:
+			ls.draw(self.screen)
 		self.earl.draw(self.screen)
 	def flip(self):
 		pygame.display.update(self.dirtyRects)
