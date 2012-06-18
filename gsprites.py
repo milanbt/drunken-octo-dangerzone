@@ -44,8 +44,7 @@ class Protagonist(IcySprite):
 		# V until the user presses an arrow key
 		self.needsInitialDraw = True
 	def update(self):
-		# Key states for player movement
-		# Maybe use events in addition, this isn't working perfectly
+	
 		if len(self.latestKeyPresses) != 0:
 			if self.latestKeyPresses[0] == K_UP:
 				self.dir = Protagonist.NORTH
