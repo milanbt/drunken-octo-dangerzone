@@ -23,6 +23,9 @@ class Stage:
 		# that need to be pygame.display.update'd
 		self.dirtyRects = []
 		
+		# When set true, game exits
+		self.exit = False
+		
 		# Create screen to draw on
 		self.screen = pygame.display.set_mode(screenSize)
 		
@@ -62,6 +65,26 @@ class Stage:
 			LakeSprite((0,256,80,32), TILE_SHEET))
 	# Calls update on every sprite
 	def update(self):
+		# Event loop that checks for exit conditions and
+		# keyboard input
+		for event in pygame.event.get():
+			if event.type == QUIT:
+				self.exit = True
+				break
+			elif event.type == KEYDOWN:
+				if event.key == K_ESCAPE:
+					self.exit = True
+					break
+				self.earl.latestKeyPresses.insert(0, event.key)
+				print event.key
+			elif event.type == KEYUP:
+				if event.key == K_ESCAPE:
+					self.exit = True
+					break
+				self.earl.latestKeyPresses.remove(event.key)
+		# Something said to do this; should work without it
+		pygame.event.pump()
+		
 		oldRect = self.earl.rect
 		self.earl.update()
 		if self.earl.dirty == 1:

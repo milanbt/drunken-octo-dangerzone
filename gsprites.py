@@ -39,29 +39,36 @@ class Protagonist(IcySprite):
 		self.dir = Protagonist.SOUTH
 		self.frame = 0
 		self.frameChangeCount = 0
+		self.latestKeyPresses = []
 		# | Fixes bug where character isn't drawn when game starts
 		# V until the user presses an arrow key
 		self.needsInitialDraw = True
 	def update(self):
 		# Key states for player movement
 		# Maybe use events in addition, this isn't working perfectly
+		if len(self.latestKeyPresses) != 0:
+			if self.latestKeyPresses[0] == K_UP:
+				self.dir = Protagonist.NORTH
+			elif self.latestKeyPresses[0] == K_DOWN:
+				self.dir = Protagonist.SOUTH
+			elif self.latestKeyPresses[0] == K_LEFT:
+				self.dir = Protagonist.WEST
+			elif self.latestKeyPresses[0] == K_RIGHT:
+				self.dir = Protagonist.EAST
 		keyPressed = pygame.key.get_pressed()
-		if keyPressed[K_UP]:
-			self.dir = Protagonist.NORTH 
+		if self.dir == Protagonist.NORTH and keyPressed[K_UP]:
 			self.yVel -= 4
-		if keyPressed[K_DOWN]: 
-			self.dir = Protagonist.SOUTH
+		if self.dir == Protagonist.SOUTH and keyPressed[K_DOWN]: 
 			self.yVel += 4
-		if keyPressed[K_RIGHT]: 
-			self.dir = Protagonist.EAST
+		if self.dir == Protagonist.EAST and keyPressed[K_RIGHT]: 
 			self.xVel += 4
-		if keyPressed[K_LEFT]:
-			self.dir = Protagonist.WEST 
+		if self.dir == Protagonist.WEST and keyPressed[K_LEFT]:
 			self.xVel -= 4
 		if (not self.needsInitialDraw) and self.xVel == 0 and self.yVel == 0:
 			self.dirty = 0
 			return
-		self.needsInitialDraw = False
+		if self.needsInitialDraw:
+			self.needsInitialDraw = False
 		self.dirty = 1
 		newX = self.rect[0] + 2**ZOOM_LVL * self.xVel
 		newY = self.rect[1] + 2**ZOOM_LVL * self.yVel
@@ -104,6 +111,7 @@ class BlockTile(Tile):
 	def __init__(self, rect, sheet, area = (48,0,16,16)):
 		Tile.__init__(self, rect, sheet, area)
 
+# Constants for the lake part locations on the scaled sprite sheet
 TL_ = rectZoom((16,16,16,16))
 T_ = rectZoom((32,16,16,16))
 TR_ = rectZoom((48,16,16,16))
