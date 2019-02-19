@@ -76,7 +76,7 @@ class Stage:
 					self.exit = True
 					break
 				self.earl.latestKeyPresses.insert(0, event.key)
-				print event.key
+				print(event.key)
 			elif event.type == KEYUP:
 				if event.key == K_ESCAPE:
 					self.exit = True

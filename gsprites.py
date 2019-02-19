@@ -126,8 +126,8 @@ class LakeSprite(Tile):
 		self.rect = rect
 	def draw(self, surface):
 		if self.dirty == 1:
-			for i in range(self.rect[2]/16):
-				for j in range(self.rect[3]/16):
+			for i in range(int(self.rect[2]/16)):
+				for j in range(int(self.rect[3]/16)):
 					if i == 0 and j == 0:
 						surface.blit(self.sheet,\
 							((self.rect[0]+i*16) * 2**ZOOM_LVL,\
